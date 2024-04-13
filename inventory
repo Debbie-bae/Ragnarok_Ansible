@@ -1,0 +1,8 @@
+[ubuntu_slave]
+192.168.33.14
+
+[centos_slave]
+192.168.33.16
+
+[controller]
+192.168.33.10 

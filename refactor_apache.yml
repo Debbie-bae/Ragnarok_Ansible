@@ -1,0 +1,37 @@
+---
+- name: Install apache and php package on centos and ubuntu
+  hosts: all
+  become: true
+
+  tasks:
+   - name: install apache2 and php package on ubuntu
+     apt:
+      name: 
+       - apache2
+       - libapache2-mod-php
+      state: latest
+      update_cache: yes
+     when: ansible_distribution == "Ubuntu"
+
+
+     # - name: update package cache (Ubuntu)
+     #apt:
+     # update_cache: yes
+     # when: ansible_distribution == "Ubuntu"
+
+     #- name: update package cache (centos)
+     #yum:
+     # update_cache: yes
+     #when: ansible_distribution == "CentOS"
+
+
+   - name: install httpd package and php on centos
+     yum:
+      name: 
+       - httpd
+       - php
+      state: latest
+      update_cache: yes
+     when: ansible_distribution == "CentOS"
+
+      

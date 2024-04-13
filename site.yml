@@ -1,0 +1,127 @@
+---
+- name: Install apache and php package on centos and ubuntu
+  hosts: all
+  become: true
+
+  tasks:
+   - name: install update and upgrade (ubuntu)
+     tags: always
+     apt:
+      update_cache: yes
+      upgrade: dist
+     when: ansible_distribution == "ubuntu" 
+
+   - name: install apache2 and php package on centos
+     tags: always
+     yum:
+      update_cache: yes
+      update_only: yes
+     when: ansible_distribution == "centos"   
+  
+
+   - name: install apache2 and php package on ubuntu
+     tags: apache.apache2,ubuntu
+     apt:
+      name: 
+       - apache2
+       - libapache2-mod-php
+      state: latest
+     when: ansible_distribution == "Ubuntu"
+
+
+
+
+   - name: install httpd package and php on centos
+     tags: apache,centos,httpd
+     yum:
+      name: 
+       - httpd
+       - php
+      state: latest
+      update_cache: yes
+     when: ansible_distribution == "CentOS"
+
+     
+
+- name: install mariadb package on centos
+  hosts: centos_slave
+  become: true
+
+  tasks:
+   - name: install mariadb package (centos)
+     tags: centos,db,mariadb
+     yum:
+      name: mariadb-server
+      state: latest
+     when: ansible_distribution == "CentOS"
+
+   - name: start and enable mariadb service
+     tags: centos,mariadb
+     service:
+      name: mariadb
+      state: started 
+      enabled: yes
+     when: ansible_distribution == "CentOS"
+
+        
+- name: install apache on ubuntu
+  hosts: ubuntu_slave
+  become: true
+
+  tasks:
+   - name: install apache2 package (ubuntu)
+     tags: apache,apache2,ubuntu
+     apt:
+      name: apache2
+      state: latest
+     when: ansible_distribution == "ubuntu"
+
+   - name: start and enable apache2 service
+     tags: ubuntu,apache2
+     service:
+      name: apache2
+      state: started
+      enabled: yes
+     when: ansible_distribution == "Ubuntu"
+
+
+- name: install apache httpd server on centos
+  hosts: centos_slave
+  become: true
+
+  tasks:
+   - name: install httpd package (centos)
+     tags: apache,httpd,centos
+     yum:
+      name: httpd
+      state: latest
+     when: ansible_distribution == "CentOS"
+
+   - name: start and enable httpd service
+     tags: centos,httpd
+     service:
+      name: httpd
+      state: started
+      enabled: yes
+     when: ansible_distribution == "CentOS"
+
+
+- name: install unzip on centos and ubuntu 
+  hosts: all
+  become: true
+
+  tasks:
+   - name: install unzip package (centos)
+     tags: centos,unzip
+     yum:
+      name: unzip
+      state: latest
+     when: ansible_distribution == "CentOS"
+
+
+   - name: install unzip package (ubuntu)
+     tags: ubuntu,unzip
+     apt:
+      name: unzip
+      state: latest
+     when: ansible_distribution == "Ubuntu" 
