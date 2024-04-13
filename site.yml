@@ -124,4 +124,19 @@
      apt:
       name: unzip
       state: latest
-     when: ansible_distribution == "Ubuntu" 
+     when: ansible_distribution == "Ubuntu"
+
+
+- name: install terraform on controller server
+  hosts: controller
+  become: true
+
+  tasks:
+   - name: terraform installation
+     unarchive:
+      src: https://releases.hashicorp.com/terraform/1.8.0/terraform_1.8.0_windows_amd64.zip
+      dest: /usr/local/bin
+      remote_src: yes
+      mode: 0755
+      owner: vagrant
+      group: vagrant
